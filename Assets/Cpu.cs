@@ -52,7 +52,7 @@ public static class Cpu
     }
 
     [System.Serializable]
-    public struct RegisterSet
+    public class RegisterSet
     {
         public uint D0;
         public uint D1;
@@ -123,50 +123,58 @@ public static class Cpu
     static public Action<uint, uint> Write32;
 
     // cpu clock
-    static public bool emulateClock = true;
-    static public double clockFrequencyMhz = 8.0f;
+    static private bool emulateClock = true;
+    static private double clockFrequencyMhz = 8.0f;
     static private long nextExecutionTick;
 
-    public static RegisterSet Registers
+    public static RegisterSet Registers;
+
+    public static void EnableClockEmulation(bool state)
     {
-        get
-        {
-            RegisterSet rs = new RegisterSet();
-            rs.D0 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D0);
-            rs.D1 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D1);
-            rs.D2 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D2);
-            rs.D3 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D3);
-            rs.D4 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D4);
-            rs.D5 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D5);
-            rs.D6 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D6);
-            rs.D7 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D7);
-            rs.A0 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A0);
-            rs.A1 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A1);
-            rs.A2 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A2);
-            rs.A3 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A3);
-            rs.A4 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A4);
-            rs.A5 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A5);
-            rs.A6 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A6);
-            rs.A7 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A7);
-            rs.PC = m68k_get_reg(IntPtr.Zero, (int)RegisterT.PC);
-            rs.SR = m68k_get_reg(IntPtr.Zero, (int)RegisterT.SR);
-            rs.SP = m68k_get_reg(IntPtr.Zero, (int)RegisterT.SP);
-            rs.USP = m68k_get_reg(IntPtr.Zero, (int)RegisterT.USP);
-            rs.ISP = m68k_get_reg(IntPtr.Zero, (int)RegisterT.ISP);
-            rs.MSP = m68k_get_reg(IntPtr.Zero, (int)RegisterT.MSP);
-            rs.SFC = m68k_get_reg(IntPtr.Zero, (int)RegisterT.SFC);
-            rs.DFC = m68k_get_reg(IntPtr.Zero, (int)RegisterT.DFC);
-            rs.VBR = m68k_get_reg(IntPtr.Zero, (int)RegisterT.VBR);
-            rs.CACR = m68k_get_reg(IntPtr.Zero, (int)RegisterT.CACR);
-            rs.CAAR = m68k_get_reg(IntPtr.Zero, (int)RegisterT.CAAR);
-            rs.PREF_ADDR = m68k_get_reg(IntPtr.Zero, (int)RegisterT.PREF_ADDR);
-            rs.PREF_DATA = m68k_get_reg(IntPtr.Zero, (int)RegisterT.PREF_DATA);
-            rs.PPC = m68k_get_reg(IntPtr.Zero, (int)RegisterT.PPC);
-            rs.IR = m68k_get_reg(IntPtr.Zero, (int)RegisterT.IR);
-            rs.CPU_TYPE = m68k_get_reg(IntPtr.Zero, (int)RegisterT.CPU_TYPE);
-            return rs;
-        }
-        private set { return; }
+        emulateClock = state;
+    }
+
+    public static void SetCpuFrequencyMhz(double freq)
+    {
+        clockFrequencyMhz = freq;
+    }
+
+    static void DumpRegisters()
+    {
+        RegisterSet rs = new RegisterSet();
+        rs.D0 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D0);
+        rs.D1 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D1);
+        rs.D2 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D2);
+        rs.D3 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D3);
+        rs.D4 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D4);
+        rs.D5 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D5);
+        rs.D6 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D6);
+        rs.D7 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.D7);
+        rs.A0 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A0);
+        rs.A1 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A1);
+        rs.A2 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A2);
+        rs.A3 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A3);
+        rs.A4 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A4);
+        rs.A5 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A5);
+        rs.A6 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A6);
+        rs.A7 = m68k_get_reg(IntPtr.Zero, (int)RegisterT.A7);
+        rs.PC = m68k_get_reg(IntPtr.Zero, (int)RegisterT.PC);
+        rs.SR = m68k_get_reg(IntPtr.Zero, (int)RegisterT.SR);
+        rs.SP = m68k_get_reg(IntPtr.Zero, (int)RegisterT.SP);
+        rs.USP = m68k_get_reg(IntPtr.Zero, (int)RegisterT.USP);
+        rs.ISP = m68k_get_reg(IntPtr.Zero, (int)RegisterT.ISP);
+        rs.MSP = m68k_get_reg(IntPtr.Zero, (int)RegisterT.MSP);
+        rs.SFC = m68k_get_reg(IntPtr.Zero, (int)RegisterT.SFC);
+        rs.DFC = m68k_get_reg(IntPtr.Zero, (int)RegisterT.DFC);
+        rs.VBR = m68k_get_reg(IntPtr.Zero, (int)RegisterT.VBR);
+        rs.CACR = m68k_get_reg(IntPtr.Zero, (int)RegisterT.CACR);
+        rs.CAAR = m68k_get_reg(IntPtr.Zero, (int)RegisterT.CAAR);
+        rs.PREF_ADDR = m68k_get_reg(IntPtr.Zero, (int)RegisterT.PREF_ADDR);
+        rs.PREF_DATA = m68k_get_reg(IntPtr.Zero, (int)RegisterT.PREF_DATA);
+        rs.PPC = m68k_get_reg(IntPtr.Zero, (int)RegisterT.PPC);
+        rs.IR = m68k_get_reg(IntPtr.Zero, (int)RegisterT.IR);
+        rs.CPU_TYPE = m68k_get_reg(IntPtr.Zero, (int)RegisterT.CPU_TYPE);
+        Registers = rs;
     }
 
     static public void Init()
@@ -209,6 +217,7 @@ public static class Cpu
         var timeShouldBeElapsed = cycleLength * eCycles;
         var ticksDelta = (long)(timeShouldBeElapsed * TimeSpan.TicksPerMillisecond);
         nextExecutionTick = eStarted + ticksDelta;
+        DumpRegisters();
         return eCycles;
     }
 
