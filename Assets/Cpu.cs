@@ -102,6 +102,7 @@ public static class Cpu
     [DllImport("Musashi")] static extern void m68k_set_cpu_type(int cputype);
     [DllImport("Musashi")] static extern int m68k_execute(int cycles);
     [DllImport("Musashi")] static extern uint m68k_get_reg(IntPtr context, int reg_num);
+    [DllImport("Musashi")] static extern void m68k_set_irq(uint int_level);
 
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     [return: MarshalAs(UnmanagedType.I4)]
@@ -121,11 +122,14 @@ public static class Cpu
     static public Action<uint, byte> Write8;
     static public Action<uint, ushort> Write16;
     static public Action<uint, uint> Write32;
+    static public ulong interruptsRequested = 0;
 
     // cpu clock
     static private bool emulateClock = true;
     static private double clockFrequencyMhz = 8.0f;
     static private long nextExecutionTick;
+    static private uint intLevel = 0;
+    static bool interruptPending = false;
 
     public static RegisterSet Registers;
 
@@ -137,6 +141,14 @@ public static class Cpu
     public static void SetCpuFrequencyMhz(double freq)
     {
         clockFrequencyMhz = freq;
+    }
+
+    public static void SetIRQ(uint int_level)
+    {
+        if (interruptPending) return;
+        interruptsRequested++;
+        intLevel = int_level;
+        interruptPending = true;
     }
 
     static void DumpRegisters()
@@ -207,6 +219,12 @@ public static class Cpu
 
     static public int Execute(int cycles)
     {
+        if (interruptPending)
+        {
+            m68k_set_irq(intLevel);
+            interruptPending = false;
+        }
+
         if (emulateClock && nextExecutionTick != 0)
         {
             while (DateTime.Now.Ticks < nextExecutionTick) { Thread.Sleep(1); }

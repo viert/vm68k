@@ -4,14 +4,17 @@ using System.Threading;
 using UnityEngine;
 
 [RequireComponent(typeof(ComputerMemory))]
+[RequireComponent(typeof(ComputerTimerDevice))]
 public class ComputerAssembly : MonoBehaviour {
 
     bool initiated = false;
     ThreadStart executionThreadStart;
     Thread executionThread;
     ComputerMemory mem;
+    ComputerTimerDevice timer;
     [SerializeField] int cyclesExecuted = 0;
     [SerializeField] Cpu.RegisterSet registers;
+    [SerializeField] ulong interruptsRequested;
 
     public Cpu.CpuTypes cpuType = Cpu.CpuTypes.M68000;
     public int cyclesToAdjust = 100000;
@@ -21,6 +24,7 @@ public class ComputerAssembly : MonoBehaviour {
     void Start()
     {
         mem = GetComponent<ComputerMemory>();
+        timer = GetComponent<ComputerTimerDevice>();
         Cpu.Init();
         initiated = true;
         Cpu.SetCPUType(cpuType);
@@ -42,6 +46,7 @@ public class ComputerAssembly : MonoBehaviour {
     void StartEmulation()
     {
         executionThread.Start();
+        timer.StartTimer();
     }
 
     void OnApplicationQuit()
@@ -53,7 +58,12 @@ public class ComputerAssembly : MonoBehaviour {
     {
         while (!stopped)
         {
-            Cpu.Execute(100000);
+            cyclesExecuted = Cpu.Execute(cyclesToAdjust);
+            if (cyclesExecuted == 0)
+            {
+                // breakpoint probably
+                stopped = true;
+            }
         }
     }
 
@@ -61,6 +71,7 @@ public class ComputerAssembly : MonoBehaviour {
         if (initiated)
         {
             registers = Cpu.Registers;
+            interruptsRequested = Cpu.interruptsRequested;
         }
     }
 }

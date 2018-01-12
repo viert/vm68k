@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 114900652136121580}
   - component: {fileID: 114595621919258762}
   - component: {fileID: 114495319548065646}
+  - component: {fileID: 114101623930248712}
+  - component: {fileID: 114675032733512180}
   m_Layer: 0
   m_Name: Computer
   m_TagString: Untagged
@@ -42,6 +44,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114101623930248712
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1080852143963950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22cd4ec9d8dd0c949a81e51524c7d74e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InterruptLevel: 1
 --- !u!114 &114495319548065646
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -54,7 +68,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderImage: {fileID: 0}
-  TextWidthMultiplier: 45
 --- !u!114 &114595621919258762
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -66,6 +79,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a1a99c95f7121d4a8b478dca063366c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114675032733512180
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1080852143963950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f55c9aa70567a49ae7cc580f335b93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InterruptLevel: 2
 --- !u!114 &114900652136121580
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -112,3 +137,6 @@ MonoBehaviour:
     IR: 0
     CPU_TYPE: 0
   cpuType: 1
+  cyclesToAdjust: 100000
+  cpuFrequency: 8
+  stopped: 0

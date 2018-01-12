@@ -7,6 +7,7 @@ public class ComputerMemory : MonoBehaviour {
 
     const int memorySize = 0x800000;
     static public byte[] memory = new byte[memorySize];
+    bool isReady = false;
 
     public delegate void MemoryChangeHandler(MemoryRange range);
     public struct MemoryRange
@@ -159,6 +160,7 @@ public class ComputerMemory : MonoBehaviour {
     void Start()
     {
         Debug.Log(string.Format("Memory Started, {0} bytes of memory installed", memory.GetLongLength(0)));
+        isReady = true;
     }
 
     void Update()
