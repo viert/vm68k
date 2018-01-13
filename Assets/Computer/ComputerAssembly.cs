@@ -9,8 +9,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(ComputerScreen))]
 public class ComputerAssembly : MonoBehaviour {
 
-    bool initiated = false;
     string dasm;
+    bool initiated = false;
     bool nextStep = false;
     ThreadStart executionThreadStart;
     Thread executionThread;
@@ -19,14 +19,16 @@ public class ComputerAssembly : MonoBehaviour {
     ComputerScreen screen;
     Cpu.RegisterSet registers;
 
-    [SerializeField] int cyclesExecuted = 0;
-    [SerializeField] ulong interruptsRequested;
+    int cyclesExecuted = 0;
+    ulong interruptsRequested;
 
     public Cpu.CpuTypes cpuType = Cpu.CpuTypes.M68000;
-    public int cyclesToAdjust = 100000;
+    public int cyclesPerExec = 100000;
+    public bool autoAdjustCycles = true;
     public double cpuFrequency = 8.0f;
     public bool stopped = false;
-    public bool stepMode = true;
+    public bool stepMode = false;
+    public bool triggerReset = false;
 
     string[] registerNames =
     {
@@ -110,7 +112,7 @@ public class ComputerAssembly : MonoBehaviour {
 
     void CpuExecutionThread()
     {
-        Debug.Log("CPU thread execution is waiting for hardware to become ready");
+        Debug.Log("CPU is waiting for hardware to become ready");
 
         while (!mem.isReady)
         {
@@ -122,13 +124,21 @@ public class ComputerAssembly : MonoBehaviour {
             Thread.Sleep(10);
         }
 
-        Debug.Log("CPU thread execution started");
+        Debug.Log("CPU started");
         Cpu.Reset();
         dasm = Cpu.Disassemble(Cpu.Registers.PC);
 
+        Cpu.ExecutionInfo ei;
         int cycles;
+
         while (!stopped)
         {
+            if (triggerReset)
+            {
+                triggerReset = false;
+                Cpu.Reset();
+            }
+
             if (stepMode)
             {
                 if (!nextStep)
@@ -143,22 +153,34 @@ public class ComputerAssembly : MonoBehaviour {
                     cyclesExecuted += cycles;
                     dasm = Cpu.Disassemble(Cpu.Registers.PC);
                 }
-
-
             }
             else
             {
-                cycles = Cpu.Execute(cyclesToAdjust);
-                if (cycles == 0)
+                ei = Cpu.Execute(cyclesPerExec);
+                if (ei.cyclesExecuted == 0)
                 {
                     stopped = true; // breakpoint probably
                 }
-                cyclesExecuted += cycles;
+
+                if (autoAdjustCycles)
+                {
+                    if (ei.cyclesSlept > 5)
+                    {
+                        cyclesPerExec -= (ei.cyclesSlept - 5)*1000;
+                    }
+                    else if (ei.cyclesSlept < 1)
+                    {
+                        cyclesPerExec += 5000;
+                    }
+
+                }
+
+                cyclesExecuted += ei.cyclesExecuted;
                 dasm = Cpu.Disassemble(Cpu.Registers.PC);
             }
         }
 
-        Debug.Log("CPU Stopped");
+        Debug.Log("CPU stopped");
     }
 
     void Update () {

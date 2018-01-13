@@ -6,15 +6,12 @@ public class ComputerScreen : MonoBehaviour {
 
     public RawImage renderImage;
 
-    const uint videoMemStart = 0x780000;
-
-    const uint modeTrigger = 0x7FF4FF;
-
-    const uint charsetStart = 0x7FF500;
-    const uint charsetEnd = 0x7FFCFF;
-
-    const uint paletteStart = 0x7FFD00;
-    const uint paletteEnd = 0x7FFFFF;
+    const uint videoMemStart = DeviceMemoryMap.VM_VideoMemoryStart;
+    const uint modeTrigger = DeviceMemoryMap.VM_VideoModeTrigger;
+    const uint charsetStart = DeviceMemoryMap.VM_TextModeCharsetStart;
+    const uint charsetEnd = DeviceMemoryMap.VM_TextModeCharsetEnd;
+    const uint paletteStart = DeviceMemoryMap.VM_PaletteStart;
+    const uint paletteEnd = DeviceMemoryMap.VM_PaletteEnd;
 
     static uint memEnd = 0;
 

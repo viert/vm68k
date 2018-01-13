@@ -2,8 +2,8 @@
 
 public class ComputerKeyboard : MonoBehaviour {
 
-    const uint keyboardMemoryStart = 0x7FF4E0;
-    const int keyboardMemorySize = 16;
+    const uint keyboardMemoryStart = DeviceMemoryMap.KBD_MemoryStart;
+    const uint keyboardMemorySize = DeviceMemoryMap.KBD_MemoryEnd - DeviceMemoryMap.KBD_MemoryStart + 1;
     public uint InterruptLevel = 2;
 
     public static KeyCode[] keyboardMap = {
@@ -134,7 +134,7 @@ public class ComputerKeyboard : MonoBehaviour {
 
     void SetBit(int index)
     {
-        int byteNum = keyboardMemorySize - 1 - (index / 8);
+        int byteNum = (int)keyboardMemorySize - 1 - (index / 8);
         int bitNum = index % 8;
         byte setMask = (byte)(0x01 << bitNum);
         currentMap[byteNum] |= setMask;

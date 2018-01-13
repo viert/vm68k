@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ComputerMemory : MonoBehaviour {
 
-    const int memorySize = 0x800000;
+    const uint memorySize = DeviceMemoryMap.MemoryTotal;
     static public byte[] memory = new byte[memorySize];
 
     [Tooltip("Dramatically slows down emulation when enabled")]

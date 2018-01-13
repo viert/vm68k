@@ -114,3 +114,4 @@ MonoBehaviour:
   cpuFrequency: 8
   stopped: 0
   stepMode: 0
+  autoAdjustCycles: 1

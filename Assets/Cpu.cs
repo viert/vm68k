@@ -89,6 +89,12 @@ public static class Cpu
         public uint CPU_TYPE;
     }
 
+    public struct ExecutionInfo
+    {
+        public int cyclesExecuted;
+        public int cyclesSlept;
+    }
+
     [DllImport("Musashi")] static extern void set_read_8(MemoryReader handler);
     [DllImport("Musashi")] static extern void set_read_16(MemoryReader handler);
     [DllImport("Musashi")] static extern void set_read_32(MemoryReader handler);
@@ -131,8 +137,9 @@ public static class Cpu
     static private double clockFrequencyMhz = 8.0f;
     static private long nextExecutionTick;
     static private uint intLevel = 0;
-    static bool interruptPending = false;
-    static uint currentCpuType; // cache for disassembler
+    static private bool interruptPending = false;
+    static private int timesSlept;
+    static private uint currentCpuType; // cache for disassembler
 
     public static RegisterSet Registers = new RegisterSet();
 
@@ -247,12 +254,13 @@ public static class Cpu
         return eCycles;
     }
 
-    static public int Execute(int cycles)
+    static public ExecutionInfo Execute(int cycles)
     {
+        timesSlept = 0;
         interruptCheck();
         if (emulateClock && nextExecutionTick != 0)
         {
-            while (DateTime.Now.Ticks < nextExecutionTick) { Thread.Sleep(1); }
+            while (DateTime.Now.Ticks < nextExecutionTick) { timesSlept++; Thread.Sleep(1); }
         }
         double cycleLength = (1000 * 2 * 1.0f) / (clockFrequencyMhz * 1000000.0f); // Cycle length in milliseconds
         var eStarted = DateTime.Now.Ticks;
@@ -261,7 +269,7 @@ public static class Cpu
         var ticksDelta = (long)(timeShouldBeElapsed * TimeSpan.TicksPerMillisecond);
         nextExecutionTick = eStarted + ticksDelta;
         DumpRegisters();
-        return eCycles;
+        return new ExecutionInfo() { cyclesExecuted = eCycles, cyclesSlept = timesSlept };
     }
 
     static uint innerRead8(uint addr)
