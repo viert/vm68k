@@ -50,7 +50,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1080852143963950}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22cd4ec9d8dd0c949a81e51524c7d74e, type: 3}
   m_Name: 
@@ -68,6 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderImage: {fileID: 0}
+  isReady: 0
 --- !u!114 &114595621919258762
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -79,6 +80,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a1a99c95f7121d4a8b478dca063366c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugReads: 0
+  debugWrites: 0
+  romFile: {fileID: 4900000, guid: 997af054742610f4b9327bf22543e298, type: 3}
+  isReady: 0
 --- !u!114 &114675032733512180
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -103,40 +108,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cyclesExecuted: 0
-  registers:
-    D0: 0
-    D1: 0
-    D2: 0
-    D3: 0
-    D4: 0
-    D5: 0
-    D6: 0
-    D7: 0
-    A0: 0
-    A1: 0
-    A2: 0
-    A3: 0
-    A4: 0
-    A5: 0
-    A6: 0
-    A7: 0
-    PC: 0
-    SR: 0
-    SP: 0
-    USP: 0
-    ISP: 0
-    MSP: 0
-    SFC: 0
-    DFC: 0
-    VBR: 0
-    CACR: 0
-    CAAR: 0
-    PREF_ADDR: 0
-    PREF_DATA: 0
-    PPC: 0
-    IR: 0
-    CPU_TYPE: 0
+  interruptsRequested: 0
   cpuType: 1
-  cyclesToAdjust: 100000
+  cyclesToAdjust: 50000
   cpuFrequency: 8
   stopped: 0
+  stepMode: 0

@@ -6,21 +6,27 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(ComputerMemory))]
 [RequireComponent(typeof(ComputerTimerDevice))]
+[RequireComponent(typeof(ComputerScreen))]
 public class ComputerAssembly : MonoBehaviour {
 
     bool initiated = false;
+    string dasm;
+    bool nextStep = false;
     ThreadStart executionThreadStart;
     Thread executionThread;
     ComputerMemory mem;
     ComputerTimerDevice timer;
+    ComputerScreen screen;
+    Cpu.RegisterSet registers;
+
     [SerializeField] int cyclesExecuted = 0;
-    [SerializeField] Cpu.RegisterSet registers;
     [SerializeField] ulong interruptsRequested;
 
     public Cpu.CpuTypes cpuType = Cpu.CpuTypes.M68000;
     public int cyclesToAdjust = 100000;
     public double cpuFrequency = 8.0f;
     public bool stopped = false;
+    public bool stepMode = true;
 
     string[] registerNames =
     {
@@ -44,12 +50,14 @@ public class ComputerAssembly : MonoBehaviour {
     };
 
     Dictionary<string, Text> uiRegisterMap;
+    Text disassemble;
 
     void Start()
     {
         BuildRegisterMap();
         mem = GetComponent<ComputerMemory>();
         timer = GetComponent<ComputerTimerDevice>();
+        screen = GetComponent<ComputerScreen>();
         Cpu.Init();
         initiated = true;
         Cpu.SetCPUType(cpuType);
@@ -62,9 +70,7 @@ public class ComputerAssembly : MonoBehaviour {
         Cpu.Write8 += mem.Write8;
         Cpu.Write16 += mem.Write16;
         Cpu.Write32 += mem.Write32;
-        Cpu.Reset();
         executionThreadStart = new ThreadStart(CpuExecutionThread);
-        executionThread = new Thread(executionThreadStart);
         Invoke("StartEmulation", 0.1f);
     }
 
@@ -74,6 +80,12 @@ public class ComputerAssembly : MonoBehaviour {
         Text[] objects = FindObjectsOfType<Text>();
         foreach (Text go in objects)
         {
+            if (go.name == "Disassembler")
+            {
+                disassemble = go;
+                continue;
+            }
+
             foreach (string regName in registerNames)
             {
                 if (go.name == regName)
@@ -86,6 +98,7 @@ public class ComputerAssembly : MonoBehaviour {
 
     void StartEmulation()
     {
+        executionThread = new Thread(executionThreadStart);
         executionThread.Start();
         timer.StartTimer();
     }
@@ -97,15 +110,55 @@ public class ComputerAssembly : MonoBehaviour {
 
     void CpuExecutionThread()
     {
+        Debug.Log("CPU thread execution is waiting for hardware to become ready");
+
+        while (!mem.isReady)
+        {
+            Thread.Sleep(10);
+        }
+
+        while (!screen.isReady)
+        {
+            Thread.Sleep(10);
+        }
+
+        Debug.Log("CPU thread execution started");
+        Cpu.Reset();
+        dasm = Cpu.Disassemble(Cpu.Registers.PC);
+
+        int cycles;
         while (!stopped)
         {
-            cyclesExecuted = Cpu.Execute(cyclesToAdjust);
-            if (cyclesExecuted == 0)
+            if (stepMode)
             {
-                // breakpoint probably
-                stopped = true;
+                if (!nextStep)
+                {
+                    Thread.Sleep(10);
+                    continue;
+                }
+                else
+                {
+                    nextStep = false;
+                    cycles = Cpu.ExecuteSingle();
+                    cyclesExecuted += cycles;
+                    dasm = Cpu.Disassemble(Cpu.Registers.PC);
+                }
+
+
+            }
+            else
+            {
+                cycles = Cpu.Execute(cyclesToAdjust);
+                if (cycles == 0)
+                {
+                    stopped = true; // breakpoint probably
+                }
+                cyclesExecuted += cycles;
+                dasm = Cpu.Disassemble(Cpu.Registers.PC);
             }
         }
+
+        Debug.Log("CPU Stopped");
     }
 
     void Update () {
@@ -130,6 +183,12 @@ public class ComputerAssembly : MonoBehaviour {
             uiRegisterMap["D6"].text = string.Format("D6 0x{0:X8}", registers.D6);
             uiRegisterMap["D7"].text = string.Format("D7 0x{0:X8}", registers.D7);
             interruptsRequested = Cpu.interruptsRequested;
+            disassemble.text = dasm;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            nextStep = true;
         }
     }
 }

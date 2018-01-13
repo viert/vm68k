@@ -25,6 +25,7 @@ public class ComputerScreen : MonoBehaviour {
     const int textTextureWidth = textWidth * charWidth;
     const int textTextureHeight = textHeight * charHeight;
 
+    [HideInInspector]
     public bool isReady = false;
 
     byte[] DefaultCharset = new byte[2048]

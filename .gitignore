@@ -34,3 +34,6 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
+vm68krom.bytes
+vm68krom.bytes.meta
+Musashi.dll.meta

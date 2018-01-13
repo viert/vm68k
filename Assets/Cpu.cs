@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -100,9 +101,10 @@ public static class Cpu
     [DllImport("Musashi")] static extern void m68k_pulse_reset();
     [DllImport("Musashi")] static extern void m68k_pulse_halt();
     [DllImport("Musashi")] static extern void m68k_set_cpu_type(int cputype);
-    [DllImport("Musashi")] static extern int m68k_execute(int cycles);
     [DllImport("Musashi")] static extern uint m68k_get_reg(IntPtr context, int reg_num);
     [DllImport("Musashi")] static extern void m68k_set_irq(uint int_level);
+    [DllImport("Musashi")] static extern int m68k_execute(int cycles);
+    [DllImport("Musashi")] static extern int m68k_disassemble([MarshalAs(UnmanagedType.LPStr)] StringBuilder buffer, uint pc, uint cpuType);
 
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     [return: MarshalAs(UnmanagedType.I4)]
@@ -111,7 +113,6 @@ public static class Cpu
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     [return: MarshalAs(UnmanagedType.I4)]
     public delegate uint MemoryReader(uint addr);
-
 
     // cpu memory access functions
     static public Func<uint, byte> Read8;
@@ -123,6 +124,7 @@ public static class Cpu
     static public Action<uint, ushort> Write16;
     static public Action<uint, uint> Write32;
     static public ulong interruptsRequested = 0;
+    static StringBuilder buf;
 
     // cpu clock
     static private bool emulateClock = true;
@@ -130,8 +132,16 @@ public static class Cpu
     static private long nextExecutionTick;
     static private uint intLevel = 0;
     static bool interruptPending = false;
+    static uint currentCpuType; // cache for disassembler
 
-    public static RegisterSet Registers;
+    public static RegisterSet Registers = new RegisterSet();
+
+    public static string Disassemble(uint pc)
+    {
+        buf = new StringBuilder(256);
+        m68k_disassemble(buf, pc, currentCpuType);
+        return buf.ToString();
+    }
 
     public static void EnableClockEmulation(bool state)
     {
@@ -205,26 +215,41 @@ public static class Cpu
     static public void Reset()
     {
         m68k_pulse_reset();
+        DumpRegisters();
     }
 
     static public void Halt()
     {
         m68k_pulse_halt();
+        DumpRegisters();
     }
 
     static public void SetCPUType(CpuTypes type)
     {
         m68k_set_cpu_type((int)type);
+        currentCpuType = (uint)type;
     }
 
-    static public int Execute(int cycles)
+    static void interruptCheck()
     {
         if (interruptPending)
         {
             m68k_set_irq(intLevel);
             interruptPending = false;
         }
+    }
 
+    static public int ExecuteSingle()
+    {
+        interruptCheck();
+        var eCycles = m68k_execute(1);
+        DumpRegisters();
+        return eCycles;
+    }
+
+    static public int Execute(int cycles)
+    {
+        interruptCheck();
         if (emulateClock && nextExecutionTick != 0)
         {
             while (DateTime.Now.Ticks < nextExecutionTick) { Thread.Sleep(1); }

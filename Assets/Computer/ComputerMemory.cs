@@ -7,7 +7,16 @@ public class ComputerMemory : MonoBehaviour {
 
     const int memorySize = 0x800000;
     static public byte[] memory = new byte[memorySize];
-    bool isReady = false;
+
+    [Tooltip("Dramatically slows down emulation when enabled")]
+    public bool debugReads = false;
+    [Tooltip("Dramatically slows down emulation when enabled")]
+    public bool debugWrites = false;
+
+    public TextAsset romFile;
+
+    [HideInInspector]
+    public bool isReady = false;
 
     public delegate void MemoryChangeHandler(MemoryRange range);
     public struct MemoryRange
@@ -70,6 +79,11 @@ public class ComputerMemory : MonoBehaviour {
 
     public void Write8(uint addr, byte data)
     {
+        if (debugWrites)
+        {
+            Debug.Log(string.Format("Write byte to {0:X8}", addr));
+        }
+        addr = normalizeAddr(addr);
         NotifyRange(addr, 1);
 
         memory[addr] = data;
@@ -96,6 +110,11 @@ public class ComputerMemory : MonoBehaviour {
 
     public void Write16(uint addr, ushort data)
     {
+        if (debugWrites)
+        {
+            Debug.Log(string.Format("Write word to {0:X8}", addr));
+        }
+        addr = normalizeAddr(addr);
         NotifyRange(addr, 2);
         byte low = (byte)data;
         byte high = (byte)(data >> 8);
@@ -106,6 +125,11 @@ public class ComputerMemory : MonoBehaviour {
 
     public void Write32(uint addr, uint data)
     {
+        if (debugWrites)
+        {
+            Debug.Log(string.Format("Write long to {0:X8}", addr));
+        }
+        addr = normalizeAddr(addr);
         NotifyRange(addr, 4);
         byte b0 = (byte)data;
         data = data >> 8;
@@ -125,12 +149,20 @@ public class ComputerMemory : MonoBehaviour {
 
     public byte Read8(uint addr)
     {
+        if (debugReads)
+        {
+            Debug.Log(string.Format("Read byte from {0:X8}", addr));
+        }
         addr = normalizeAddr(addr);
         return memory[addr];
     }
 
     public ushort Read16(uint addr)
     {
+        if (debugReads)
+        {
+            Debug.Log(string.Format("Read word from {0:X8}", addr));
+        }
         uint data = 0;
         addr = normalizeAddr(addr);
         data = data | memory[addr];
@@ -142,6 +174,10 @@ public class ComputerMemory : MonoBehaviour {
 
     public uint Read32(uint addr)
     {
+        if (debugReads)
+        {
+            Debug.Log(string.Format("Read long from {0:X8}", addr));
+        }
         uint data = 0;
         addr = normalizeAddr(addr);
         data = data | memory[addr];
@@ -157,9 +193,25 @@ public class ComputerMemory : MonoBehaviour {
         return data;
     }
 
+    void LoadRom()
+    {
+        if (romFile == null)
+        {
+            Debug.LogError("ROM file can't be loaded");
+            return;
+        }
+        for (int i = 0; i < romFile.bytes.Length; i++)
+        {
+            memory[i] = romFile.bytes[i];
+        }
+        Debug.Log(string.Format("Loaded {0} bytes of ROM", romFile.bytes.Length));
+    }
+
+
     void Start()
     {
         Debug.Log(string.Format("Memory Started, {0} bytes of memory installed", memory.GetLongLength(0)));
+        LoadRom();
         isReady = true;
     }
 
