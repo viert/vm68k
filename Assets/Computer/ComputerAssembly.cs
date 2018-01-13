@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -49,6 +49,7 @@ public class ComputerAssembly : MonoBehaviour {
         "D5",
         "D6",
         "D7",
+        "SR",
     };
 
     Dictionary<string, Text> uiRegisterMap;
@@ -204,6 +205,7 @@ public class ComputerAssembly : MonoBehaviour {
             uiRegisterMap["D5"].text = string.Format("D5 0x{0:X8}", registers.D5);
             uiRegisterMap["D6"].text = string.Format("D6 0x{0:X8}", registers.D6);
             uiRegisterMap["D7"].text = string.Format("D7 0x{0:X8}", registers.D7);
+            uiRegisterMap["SR"].text = string.Format("SR {0}", Convert.ToString(registers.SR, 2).PadLeft(16, '0'));
             interruptsRequested = Cpu.interruptsRequested;
             disassemble.text = dasm;
         }
