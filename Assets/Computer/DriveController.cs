@@ -40,6 +40,7 @@ public class DriveController : MonoBehaviour {
         Error
     }
 
+    [Serializable]
     public struct DriveInfo
     {
         public uint sectors;
