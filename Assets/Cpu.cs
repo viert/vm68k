@@ -2,6 +2,7 @@
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Threading;
+using UnityEngine;
 
 public static class Cpu
 {
@@ -243,6 +244,7 @@ public static class Cpu
         {
             m68k_set_irq(intLevel);
             interruptPending = false;
+            Debug.Log(string.Format("CPU got an interrupt level {0}", intLevel));
         }
     }
 
