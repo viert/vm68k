@@ -527,11 +527,6 @@ Prefab:
       propertyPath: renderImage
       value: 
       objectReference: {fileID: 734070182}
-    - target: {fileID: 114900652136121580, guid: e83859bbaf25b1240ac5d5a0565e4153,
-        type: 2}
-      propertyPath: stepMode
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e83859bbaf25b1240ac5d5a0565e4153, type: 2}
   m_IsPrefabParent: 0

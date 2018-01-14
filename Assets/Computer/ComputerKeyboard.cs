@@ -4,7 +4,7 @@ public class ComputerKeyboard : MonoBehaviour {
 
     const uint keyboardMemoryStart = DeviceMemoryMap.KBD_MemoryStart;
     const uint keyboardMemorySize = DeviceMemoryMap.KBD_MemoryEnd - DeviceMemoryMap.KBD_MemoryStart + 1;
-    public uint InterruptLevel = 2;
+    public uint InterruptLevel = 4;
 
     public static KeyCode[] keyboardMap = {
         KeyCode.Escape,

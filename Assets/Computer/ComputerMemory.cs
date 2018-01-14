@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class ComputerMemory : MonoBehaviour {
 
+    // TODO MemoryProxy for devices 
+    // to avoid memory changes while writing to memory ranges which
+    // are supposed to be written by device only
+
     const uint memorySize = DeviceMemoryMap.MemoryTotal;
     static public byte[] memory = new byte[memorySize];
 

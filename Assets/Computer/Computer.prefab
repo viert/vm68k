@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 114495319548065646}
   - component: {fileID: 114101623930248712}
   - component: {fileID: 114675032733512180}
+  - component: {fileID: 114740147272070702}
   m_Layer: 0
   m_Name: Computer
   m_TagString: Untagged
@@ -96,6 +97,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InterruptLevel: 2
+--- !u!114 &114740147272070702
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1080852143963950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a80901195f4f62409e3f953e7eddc69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentStatus: 2
+  isReady: 0
+  InterruptLevel: 5
+  driveFilename: 
 --- !u!114 &114900652136121580
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -107,11 +123,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93265d04c542d5e4b9546e32902c06c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cyclesExecuted: 0
-  interruptsRequested: 0
   cpuType: 1
-  cyclesToAdjust: 50000
+  cyclesPerExec: 100000
+  autoAdjustCycles: 1
   cpuFrequency: 8
   stopped: 0
-  stepMode: 0
-  autoAdjustCycles: 1
+  stepMode: 1
+  triggerReset: 0

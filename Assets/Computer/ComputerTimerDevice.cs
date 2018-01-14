@@ -5,7 +5,7 @@ using UnityEngine;
 public class ComputerTimerDevice : MonoBehaviour {
 
     bool timerTicking;
-    public uint InterruptLevel = 1;
+    public uint InterruptLevel = 3;
 
     public void StartTimer()
     {
