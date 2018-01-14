@@ -527,6 +527,11 @@ Prefab:
       propertyPath: renderImage
       value: 
       objectReference: {fileID: 734070182}
+    - target: {fileID: 114740147272070702, guid: e83859bbaf25b1240ac5d5a0565e4153,
+        type: 2}
+      propertyPath: driveFilename
+      value: C:\Users\viert\Downloads\37246.jpg
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e83859bbaf25b1240ac5d5a0565e4153, type: 2}
   m_IsPrefabParent: 0
