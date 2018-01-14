@@ -83,7 +83,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugReads: 0
   debugWrites: 0
-  romFile: {fileID: 4900000, guid: 997af054742610f4b9327bf22543e298, type: 3}
+  romFile: {fileID: 4900000, guid: ab0ad258fae7d974e86c913ba6b065fe, type: 3}
   isReady: 0
 --- !u!114 &114675032733512180
 MonoBehaviour:
@@ -109,9 +109,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentStatus: 2
+  driveInfo:
+    sectors: 0
+    bytes: 0
   isReady: 0
   InterruptLevel: 5
-  driveFilename: 
+  driveFilename: C:\Users\viert\hdd.bytes
 --- !u!114 &114900652136121580
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -128,5 +131,5 @@ MonoBehaviour:
   autoAdjustCycles: 1
   cpuFrequency: 8
   stopped: 0
-  stepMode: 1
+  stepMode: 0
   triggerReset: 0

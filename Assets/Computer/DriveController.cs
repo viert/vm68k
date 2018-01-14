@@ -115,6 +115,7 @@ public class DriveController : MonoBehaviour {
             switch (cmd)
             {
                 case Command.None:
+                    Thread.Sleep(10);
                     break;
                 case Command.Info:
                     cmdInfo();
@@ -129,7 +130,8 @@ public class DriveController : MonoBehaviour {
                     cmdReset();
                     break;
             }
-            Thread.Sleep(10);
+            Thread.Sleep(1);
+
         }
         fs.Close();
         Debug.Log(string.Format("{0} stopped", deviceName));
@@ -199,6 +201,7 @@ public class DriveController : MonoBehaviour {
         {
             ComputerMemory.memory[addr++] = buffer[i];
         }
+        Debug.Log(string.Format("Read sector {0} from disk into buffer", sectorNum));
 
         SetStatus(Status.Ready);
         requestInterrupt();
@@ -232,6 +235,7 @@ public class DriveController : MonoBehaviour {
             buffer[i] = ComputerMemory.memory[addr++];
         }
         fs.Write(buffer, 0, (int)DeviceMemoryMap.HDD_SectorSize);
+        Debug.Log(string.Format("Wrote buffer to sector {0} of disk", sectorNum));
 
         SetStatus(Status.Ready);
         requestInterrupt();
