@@ -17,3 +17,5 @@ This is an imaginary computer emulator written in Unity3d/C# using [musashidll](
   * Computer screen made with a whole-screen texture rerendering when needed
   * All computer components made as GameObject components.
   * ROM and HDD images are currently made as binary TextAssets
+  * Built-in debugger may be turned on by pressing Pause key. Currently it doesn't switch the emulator to Step Mode.
+  * In step mode the next step button is Num5. This will change in the nearest future
