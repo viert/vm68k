@@ -653,12 +653,15 @@ public class ComputerScreen : MonoBehaviour {
 
     public void OnScreenMemoryChange(ComputerMemory.MemoryRange range)
     {
+        Debug.Log("Screen memory changed");
         needRedraw = true;
     }
 
     public void OnPaletteChange(ComputerMemory.MemoryRange range)
     {
+        Debug.Log("Palette memory changed");
         needPaletteChange = true;
+        needRedraw = true;
     }
 
     public void OnModeChange(ComputerMemory.MemoryRange range)

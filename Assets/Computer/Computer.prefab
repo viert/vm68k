@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 114101623930248712}
   - component: {fileID: 114675032733512180}
   - component: {fileID: 114740147272070702}
+  - component: {fileID: 114324099371566884}
   m_Layer: 0
   m_Name: Computer
   m_TagString: Untagged
@@ -57,6 +58,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InterruptLevel: 1
+--- !u!114 &114324099371566884
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1080852143963950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d3ca7161938d49f8b517076b03245eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  watches:
+  - name: cursorX
+    addr: 4000
+    value: 0
+  - name: cursorY
+    addr: 4001
+    value: 0
+  - name: color
+    addr: 4002
+    value: 0
 --- !u!114 &114495319548065646
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -126,10 +148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93265d04c542d5e4b9546e32902c06c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cpuType: 4
+  cpuType: 1
   cyclesPerExec: 100000
   autoAdjustCycles: 1
-  cpuFrequency: 14
+  cpuFrequency: 8
   stopped: 0
-  stepMode: 1
+  stepMode: 0
   triggerReset: 0
