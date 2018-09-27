@@ -168,6 +168,9 @@ public class ComputerAssembly : MonoBehaviour {
                     if (ei.cyclesSlept > 5)
                     {
                         cyclesPerExec -= (ei.cyclesSlept - 5)*1000;
+                        if (cyclesPerExec < 1000) {
+                            cyclesPerExec = 1000;
+                        }
                     }
                     else if (ei.cyclesSlept < 1)
                     {
@@ -210,7 +213,7 @@ public class ComputerAssembly : MonoBehaviour {
             disassemble.text = dasm;
         }
 
-        if (Input.GetKeyDown(KeyCode.Keypad5))
+        if (Input.GetKeyDown(KeyCode.F8))
         {
             nextStep = true;
         }

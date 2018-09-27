@@ -37,7 +37,7 @@ public class ControlPanel : MonoBehaviour {
         Vector3 currentPosition = rt.localPosition;
         rt.localPosition = Vector3.Lerp(currentPosition, new Vector3(x, 0, 0), 0.25f);
 
-        if (Input.GetKeyDown(KeyCode.Pause))
+        if (Input.GetKeyDown(KeyCode.F12))
         {
             expanded = !expanded;
         }

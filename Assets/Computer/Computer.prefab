@@ -8,15 +8,15 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
+  m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1080852143963950}
-  m_IsPrefabParent: 1
+  m_IsPrefabAsset: 1
 --- !u!1 &1080852143963950
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 4903763820243118}
   - component: {fileID: 114900652136121580}
@@ -35,7 +35,7 @@ GameObject:
 --- !u!4 &4903763820243118
 Transform:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1080852143963950}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
@@ -48,7 +48,7 @@ Transform:
 --- !u!114 &114101623930248712
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1080852143963950}
   m_Enabled: 0
@@ -60,7 +60,7 @@ MonoBehaviour:
 --- !u!114 &114495319548065646
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1080852143963950}
   m_Enabled: 1
@@ -73,7 +73,7 @@ MonoBehaviour:
 --- !u!114 &114595621919258762
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1080852143963950}
   m_Enabled: 1
@@ -83,12 +83,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugReads: 0
   debugWrites: 0
-  romFile: {fileID: 4900000, guid: ab0ad258fae7d974e86c913ba6b065fe, type: 3}
+  romFile: {fileID: 4900000, guid: bc52b5eae3b324e1a94d79e542b06139, type: 3}
   isReady: 0
 --- !u!114 &114675032733512180
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1080852143963950}
   m_Enabled: 1
@@ -100,7 +100,7 @@ MonoBehaviour:
 --- !u!114 &114740147272070702
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1080852143963950}
   m_Enabled: 1
@@ -108,17 +108,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a80901195f4f62409e3f953e7eddc69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStatus: 2
+  currentStatus: 3
   driveInfo:
     sectors: 0
     bytes: 0
   isReady: 0
   InterruptLevel: 5
-  driveFilename: C:\Users\viert\hdd.bytes
+  driveFilename: 
 --- !u!114 &114900652136121580
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1080852143963950}
   m_Enabled: 1
@@ -126,10 +126,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93265d04c542d5e4b9546e32902c06c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cpuType: 1
+  cpuType: 4
   cyclesPerExec: 100000
   autoAdjustCycles: 1
-  cpuFrequency: 8
+  cpuFrequency: 14
   stopped: 0
-  stepMode: 0
+  stepMode: 1
   triggerReset: 0

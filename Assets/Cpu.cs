@@ -6,6 +6,16 @@ using UnityEngine;
 
 public static class Cpu
 {
+    static Cpu()
+    {
+        var currentPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
+        var dllPath = Application.dataPath + "/" + "Plugins";
+        Debug.Log(dllPath);
+        if (currentPath != null && currentPath.Contains(dllPath) == false) {
+            Environment.SetEnvironmentVariable("PATH", currentPath + ":" + dllPath, EnvironmentVariableTarget.Process);
+        }
+    }
+
     enum RegisterT
     {
         D0,         /* Data registers */
@@ -95,6 +105,7 @@ public static class Cpu
         public int cyclesExecuted;
         public int cyclesSlept;
     }
+
 
     [DllImport("Musashi")] static extern void set_read_8(MemoryReader handler);
     [DllImport("Musashi")] static extern void set_read_16(MemoryReader handler);
