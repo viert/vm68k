@@ -11,7 +11,11 @@
     public const uint HDD_CommandTrigger = 0x7F5500;
     public const uint HDD_Status = 0x7F5501;
     public const uint HDD_CommandArg = 0x7F5502; // 4 bytes
-    // 40922 bytes gap
+    // 254 bytes gap
+
+    // Next 40668 bytes gap is used by OS to keep OS variables
+    public const uint OS_Vars = 0x7F5600;
+    
     public const uint KBD_MemoryStart = 0x7FF4E0;
     public const uint KBD_MemoryEnd = 0x7FF4EF;
     // 14 bytes gap
