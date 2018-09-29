@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,8 +17,6 @@ public class ComputerMemory : MonoBehaviour {
     public bool debugReads = false;
     [Tooltip("Dramatically slows down emulation when enabled")]
     public bool debugWrites = false;
-
-    public TextAsset romFile;
 
     [HideInInspector]
     public bool isReady = false;
@@ -105,11 +104,7 @@ public class ComputerMemory : MonoBehaviour {
 
     uint normalizeAddr(uint addr)
     {
-        while (addr >= memory.Length)
-        {
-            addr -= (uint)memory.Length;
-        }
-        return addr;
+		return (uint)(addr % memory.Length);
     }
 
     public void Write16(uint addr, ushort data)
@@ -197,18 +192,30 @@ public class ComputerMemory : MonoBehaviour {
         return data;
     }
 
-    void LoadRom()
+    public void LoadRom()
     {
-        if (romFile == null)
-        {
-            Debug.LogError("ROM file can't be loaded");
-            return;
-        }
-        for (int i = 0; i < romFile.bytes.Length; i++)
-        {
-            memory[i] = romFile.bytes[i];
-        }
-        Debug.Log(string.Format("Loaded {0} bytes of ROM", romFile.bytes.Length));
+		int i, n;
+		BinaryReader reader;
+		Configurator.ReadConfig();
+		string romFilename = Configurator.RomPath;
+		try {
+			reader = new BinaryReader(new FileStream(romFilename, FileMode.Open));
+		} catch (IOException e) {
+			Debug.LogError("Can't read ROM file " + romFilename);
+			Debug.LogError(e.Message);
+			return;
+		}
+
+		i = 0;
+		while (true) {
+			n = reader.Read(memory, i, 4096);
+			if (n == 0) {
+				break;
+			}
+			i += n;
+		}
+		reader.Close();
+        Debug.Log(string.Format("Loaded {0} bytes of ROM", i));
     }
 
 

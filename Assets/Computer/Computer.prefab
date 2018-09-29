@@ -105,7 +105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugReads: 0
   debugWrites: 0
-  romFile: {fileID: 4900000, guid: bc52b5eae3b324e1a94d79e542b06139, type: 3}
+  romFile: {fileID: 4900000, guid: 18a0f403056784620916fdd921e85f46, type: 3}
   isReady: 0
 --- !u!114 &114675032733512180
 MonoBehaviour:
@@ -148,10 +148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93265d04c542d5e4b9546e32902c06c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cpuType: 1
+  cpuType: 4
   cyclesPerExec: 100000
   autoAdjustCycles: 1
-  cpuFrequency: 8
+  cpuFrequency: 16
   stopped: 0
   stepMode: 0
   triggerReset: 0

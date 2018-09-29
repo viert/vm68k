@@ -17,6 +17,7 @@ public class ComputerAssembly : MonoBehaviour {
     ComputerMemory mem;
     ComputerTimerDevice timer;
     ComputerScreen screen;
+	Flash flash;
     Cpu.RegisterSet registers;
 
     int cyclesExecuted = 0;
@@ -61,6 +62,7 @@ public class ComputerAssembly : MonoBehaviour {
         mem = GetComponent<ComputerMemory>();
         timer = GetComponent<ComputerTimerDevice>();
         screen = GetComponent<ComputerScreen>();
+		flash = FindObjectOfType<Flash>();
         Cpu.Init();
         initiated = true;
         Cpu.SetCPUType(cpuType);
@@ -137,7 +139,8 @@ public class ComputerAssembly : MonoBehaviour {
             if (triggerReset)
             {
                 triggerReset = false;
-                Cpu.Reset();
+				mem.LoadRom();
+				Cpu.Reset();
             }
 
             if (stepMode)
@@ -184,7 +187,7 @@ public class ComputerAssembly : MonoBehaviour {
             }
         }
 
-        Debug.Log("CPU stopped");
+        Debug.Log("CPU has stopped");
     }
 
     void Update () {
@@ -217,5 +220,11 @@ public class ComputerAssembly : MonoBehaviour {
         {
             nextStep = true;
         }
+
+        if (Input.GetKeyDown(KeyCode.F5))
+		{
+			triggerReset = true;
+			flash.FlashMessage("CPU Reset");
+		}
     }
 }

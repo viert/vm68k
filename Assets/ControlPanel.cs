@@ -4,7 +4,7 @@ public class ControlPanel : MonoBehaviour {
 
     public float widthPercentage = 0.4f;
 
-    bool expanded = true;
+    bool expanded;
     RectTransform rt;
     RectTransform parent;
 	// Use this for initialization

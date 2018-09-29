@@ -1,6 +1,7 @@
 ﻿public static class DeviceMemoryMap {
 
     public const uint MemoryTotal = 0x800000;
+	public const uint ROMTotal = 0x8000;
 
     // Devices Memory Mapping
     public const uint VM_VideoMemoryStart = 0x780000;
